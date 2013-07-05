@@ -1,0 +1,32 @@
+
+sidekiq_qlen_default_values = (75, 150)
+
+# the inventory function (dummy)
+
+def inventory_sidekiq(info):
+   #print info
+   inventory = []
+   for line in info:
+     qlen = line[0]
+     field = line[1]
+     if qlen == "qlen":
+       inventory.append( (qlen, "", "sidekiq_qlen_default_values") )
+   return inventory
+
+# the check function (dummy)
+def check_sidekiq(item, params, info):
+   for line in info:
+     qlength = int(line[1])
+     if qlength > 150:
+       return (2, "CRITICAL - Sidekiq Queue Length is %d"  % qlength, [ ( "queue_length", qlengt
+h)])
+     elif qlength > 75:
+       return (1, "WARNING - Sidekiq Queue Length is %d"  % qlength, [ ( "queue_length", qlength
+)])
+     else:
+       return (0, "OK - Sidekiq Queue Length is %d" %  qlength, [ ( "queue_length", qlength)])
+   return (3, "UNKNOWN - No Output from agent ")
+
+# declare the check to Check_MK
+check_info['sidekiq.qlen'] = \
+      (check_sidekiq, "Sidekiq Queue Length", 1, inventory_sidekiq)

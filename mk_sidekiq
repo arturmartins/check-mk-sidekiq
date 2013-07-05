@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Check_mk plugin to check sidekiq queue length
+#
+#	Version 1.0
+#
+# 2013-07-03 FLX demian@atpay.com
+#	- First  version
+#
+
+if which redis-cli && which sidekiq; then
+	echo '<<<sidekiq>>>'
+	echo 'qlen' `redis-cli llen default`
+fi
