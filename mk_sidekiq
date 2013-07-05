@@ -4,11 +4,13 @@
 #
 #	Version 1.0
 #
-# 2013-07-03 FLX demian@atpay.com
+# 2013-07-03 demian@atpay.com
 #	- First  version
 #
 
+QUEUE="default"
+
 if which redis-cli && which sidekiq; then
 	echo '<<<sidekiq>>>'
-	echo 'qlen' `redis-cli llen default`
+	echo 'qlen' `redis-cli llen $QUEUE`
 fi
