@@ -2,8 +2,11 @@
 
 # Check_mk plugin to check sidekiq queue length
 #
+#
+# 2015-04-24 arturmartins@gmail.com
+#       - version 3
 # 2013-07-23 demian@atpay.com
-#	- version 2
+#       - version 2
 #
 
 LOWQUEUE="low"
@@ -11,10 +14,13 @@ CRITQUEUE="critical"
 DEFQUEUE="default"
 WORKERS="workers"
 
-if which redis-cli && which redis-server; then
-	echo '<<<sidekiq>>>'
-	echo 'lowq' `redis-cli -n 12 LLEN $LOWQUEUE`
-	echo 'critq' `redis-cli -n 12 LLEN $CRITQUEUE`
-	echo 'defq' `redis-cli -n 12 LLEN $DEFQUEUE`
-	echo 'workers' `redis-cli -n 12 SCARD $WORKERS`
+REDIS_CLI=$(which redis-cli)
+REDIS_SERVER=$(which redis-server)
+
+if [[ -x "$REDIS_CLI" ]] && [[ -x "$REDIS_SERVER" ]]; then
+        echo '<<<sidekiq>>>'
+        echo 'lowq' $($REDIS_CLI -n 12 LLEN $LOWQUEUE)
+        echo 'critq' $($REDIS_CLI -n 12 LLEN $CRITQUEUE)
+        echo 'defq' $($REDIS_CLI -n 12 LLEN $DEFQUEUE)
+        echo 'workers' $($REDIS_CLI -n 12 SCARD $WORKERS)
 fi
